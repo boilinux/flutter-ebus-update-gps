@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -42,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isLoading = false;
   bool _isTrigger = true;
   Position? _currentPosition;
+  Timer? timer;
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -85,11 +87,16 @@ class _MyHomePageState extends State<MyHomePage> {
     Future<Position> gps = _determinePosition();
 
     if (_isLoading && _isTrigger) {
+      Api? api = Api('1f45f5d94a0226d1eec541da180fb03eb39170b8');
       setState(() {
         gps.then((Position position) {
           setState(() {
             _currentPosition = position;
-            inspect(_currentPosition);
+            // inspect(_currentPosition);
+
+            // request to server
+            api.postData(_currentPosition!.latitude.toString(),
+                _currentPosition!.longitude.toString());
           });
         }).catchError((e) {
           debugPrint(e);
@@ -120,6 +127,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
+      setState(() {
+        _isTrigger = true;
+      });
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     if (_isInit) {
       setState(() {
@@ -128,5 +145,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 }

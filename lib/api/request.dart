@@ -12,8 +12,7 @@ class Api {
   Future<void> postData(String latitude, String longitude) async {
     try {
       var _headers = {
-        HttpHeaders.authorizationHeader:
-            '1f45f5d94a0226d1eec541da180fb03eb39170b8',
+        HttpHeaders.authorizationHeader: token,
         HttpHeaders.contentTypeHeader: 'application/vnd.api+json'
       };
 
@@ -29,7 +28,7 @@ class Api {
       final extractedData =
           json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
 
-      // inspect(extractedData);
+      inspect(extractedData);
       // ignore: unnecessary_null_comparison
       if (extractedData == null) {
         return;
