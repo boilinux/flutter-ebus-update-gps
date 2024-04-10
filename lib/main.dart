@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'This app will auto update the gps tracker in the server for every 5seconds.',
+                'This app will auto update the gps tracker in the server for every 10seconds.',
               ),
             ),
           ],
